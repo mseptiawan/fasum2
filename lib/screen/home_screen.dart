@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fasum2/screens/sign_in_screen.dart';
-import 'package:fasum2/screens/add_post_screen.dart';
+import 'package:fasum2/screen/sign_in_screen.dart';
+import 'package:fasum2/screen/add_post_screen.dart';
 
+// Halaman utama aplikasi setelah login berhasil.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  // Fungsi untuk logout dari Firebase dan kembali ke halaman SignIn
   Future<void> signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const SignInScreen()),
-    );
+        MaterialPageRoute(builder: (context) => const SignInScreen()));
   }
 
   @override
@@ -17,22 +19,24 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
             onPressed: () {
-              signOut(context);
+              signOut(context); // Logout saat tombol ditekan
             },
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
-      body: const Center(child: Text('Currently no posts')),
+      body: const Center(
+        child: Text('Currently no posts'), // Konten placeholder
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (context) => AddPostScreen()));
+          // Arahkan ke halaman tambah post
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AddPostScreen()),
+          );
         },
         child: const Icon(Icons.add),
       ),
