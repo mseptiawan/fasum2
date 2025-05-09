@@ -1,12 +1,15 @@
+import 'package:fasum2/screen/home_screen.dart';
+import 'package:fasum2/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fasum2/screen/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
   @override
   SignUpScreenState createState() => SignUpScreenState();
 }
+
 class SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -110,7 +113,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () {
                           setState(() {
                             _isConfirmPasswordVisible =
-                            !_isConfirmPasswordVisible;
+                                !_isConfirmPasswordVisible;
                           });
                         },
                       ),
@@ -130,9 +133,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
-                    onPressed: _signUp,
-                    child: const Text('Sign Up'),
-                  ),
+                        onPressed: _signUp,
+                        child: const Text('Sign Up'),
+                      ),
                 ],
               ),
             ),
@@ -141,6 +144,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
   void _signUp() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -149,22 +153,20 @@ class SignUpScreenState extends State<SignUpScreen> {
     final password = _passwordController.text;
     setState(() => _isLoading = true);
     try {
-      final userCredential = await
-      FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      await
-      FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).
-      set({
-        'fullName': _fullNameController.text.trim(),
-        'email': email,
-        'createdAt': Timestamp.now(),
-      });
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+            'fullName': _fullNameController.text.trim(),
+            'email': email,
+            'createdAt': Timestamp.now(),
+          });
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
-            (route) => false, // Hapus semua route sebelumnya
+        (route) => false, // Hapus semua route sebelumnya
       );
     } on FirebaseAuthException catch (error) {
       _showErrorMessage(_getAuthErrorMessage(error.code));
@@ -174,16 +176,19 @@ class SignUpScreenState extends State<SignUpScreen> {
       setState(() => _isLoading = false);
     }
   }
+
   void _showErrorMessage(String message) {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
   }
+
   bool _isValidEmail(String email) {
     String emailRegex =
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zAZ0-9-]+)*$";
     return RegExp(emailRegex).hasMatch(email);
   }
+
   String _getAuthErrorMessage(String code) {
     switch (code) {
       case 'weak-password':
@@ -196,6 +201,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         return 'An error occurred. Please try again.';
     }
   }
+
   @override
   void dispose() {
     _fullNameController.dispose();
