@@ -50,7 +50,9 @@ class SignInScreenState extends State<SignInScreen> {
                     ),
                     validator: (value) {
                       // Validasi email kosong atau tidak valid
-                      if (value == null || value.isEmpty || !_isValidEmail(value)) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !_isValidEmail(value)) {
                         return 'Please enter a valid email';
                       }
                       return null;
@@ -61,7 +63,8 @@ class SignInScreenState extends State<SignInScreen> {
                   // Input password
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: !_isPasswordVisible, // Mengatur apakah password terlihat atau tidak
+                    obscureText:
+                        !_isPasswordVisible, // Mengatur apakah password terlihat atau tidak
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: const OutlineInputBorder(),
@@ -91,16 +94,17 @@ class SignInScreenState extends State<SignInScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
-                    onPressed: _signIn,
-                    child: const Text('Sign In'),
-                  ),
+                          onPressed: _signIn,
+                          child: const Text('Sign In'),
+                        ),
 
                   const SizedBox(height: 16.0),
 
                   // Tautan ke halaman Sign Up
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                      style:
+                          const TextStyle(fontSize: 16.0, color: Colors.black),
                       children: [
                         const TextSpan(text: "Don't have an account? "),
                         TextSpan(
@@ -156,10 +160,12 @@ class SignInScreenState extends State<SignInScreen> {
       );
     } on FirebaseAuthException catch (error) {
       // Menampilkan error dari Firebase Auth
-      _showSnackBar(_getAuthErrorMessage(error.code));
+      print('error: $error');
+      // _showSnackBar(_getAuthErrorMessage(error.code));
     } catch (error) {
       // Menampilkan error umum
-      _showSnackBar('An error occurred: $error');
+      print('error: $error');
+      // _showSnackBar('An error occurred: $error');
     } finally {
       setState(() => _isLoading = false); // Sembunyikan loading
     }

@@ -17,10 +17,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text(
+          'Fasum Septiawan',
+          style: TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.filter_list),
+            tooltip: 'Filter Kategori',
+          ),
           IconButton(
             onPressed: () {
               signOut(context); // Logout saat tombol ditekan
@@ -32,6 +43,25 @@ class HomeScreen extends StatelessWidget {
       body: const Center(
         child: Text('Currently no posts'), // Konten placeholder
       ),
+      
+      // if ( !snapshot.hasData){
+      //   return const Center(child: CircularProgressIndicator());
+      // }
+      // final posts = snapshot.data!.docs.where((doc){
+      //   final data = doc.data();
+      //   final category =  data['category'] ?? 'lainnya';
+      //   return selectedCategory == null || selectedCategory == category;
+
+      // }).tolist();
+      // if(posts.isEmpty){
+      //   return const Center(child: Text('tidak ada laporan untuk kategori ini '));
+
+      // }
+      // return ListView.builder(
+
+
+
+      // );
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Arahkan ke halaman tambah post
