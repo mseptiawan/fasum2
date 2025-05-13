@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 
+// import 'package:firebase_auth/firebase_auth.dart'
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
   @override
@@ -75,9 +76,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
     try {
       final imageBytes = await _image!.readAsBytes();
       final base64Image = base64Encode(imageBytes);
-      const apiKey = 'AIzaSyA23gqMOxqekvvZwnd7AoDDi8N-2XuQf5w';
+      const apiKey =
+          'AIzaSyBfQEqac8FUOtyYEVTecV12jYHrqC0pFt8'; // ganti dengan API key kamu
       const url =
-          'https://generativelanguage.googleapis.com/v1/models/gemini2.0-flash:generateContent?key=$apiKey';
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
       final body = jsonEncode({
         "contents": [
           {
@@ -86,8 +88,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 "inlineData": {"mimeType": "image/jpeg", "data": base64Image},
               },
               {
-                "text":
-                    "Berdasarkan foto ini, identifikasi satu kategori utama kerusakan fasilitas umum "
+                "text": "Berdasarkan foto ini, identifikasi satu kategori utama kerusakan fasilitas umum "
                     "dari daftar berikut: Jalan Rusak, Marka Pudar, Lampu Mati, Trotoar Rusak, "
                     "Rambu Rusak, Jembatan Rusak, Sampah Menumpuk, Saluran Tersumbat, Sungai Tercemar, "
                     "Sampah Sungai, Pohon Tumbang, Taman Rusak, Fasilitas Rusak, Pipa Bocor, "
@@ -124,9 +125,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
               category = line.substring(9).trim();
             } else if (lower.startsWith('deskripsi:')) {
               description = line.substring(10).trim();
-            } else if (lower.startsWith('keterangan:')) {
-              description = line.substring(11).trim();
             }
+            // else if (lower.startsWith('keterangan:')) {
+            //   description = line.substring(11).trim();
+            // }
           }
           description ??= text.trim();
           setState(() {
@@ -272,24 +274,23 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child:
-                    _image != null
-                        ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(
-                            _image!,
-                            height: 250,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                        : const Center(
-                          child: Icon(
-                            Icons.add_a_photo,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
+                child: _image != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(
+                          _image!,
+                          height: 250,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
                         ),
+                      )
+                    : const Center(
+                        child: Icon(
+                          Icons.add_a_photo,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                      ),
               ),
             ),
             SizedBox(height: 24),
@@ -306,10 +307,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
             _isUploading
                 ? CircularProgressIndicator()
                 : ElevatedButton.icon(
-                  onPressed: _SubmitPost,
-                  icon: Icon(Icons.upload),
-                  label: Text('Post'),
-                ),
+                    onPressed: _SubmitPost,
+                    icon: Icon(Icons.upload),
+                    label: Text('Post'),
+                  ),
           ],
         ),
       ),
