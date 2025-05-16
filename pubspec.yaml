@@ -53,6 +53,7 @@ dependencies:
   google_generative_ai: ^0.4.7
   shimmer: ^3.0.0
   http: ^1.4.0
+  intl: ^0.18.1
 
   
 dev_dependencies:
